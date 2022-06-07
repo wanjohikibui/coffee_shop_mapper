@@ -12,7 +12,6 @@ class TypeSerializer(serializers.ModelSerializer):
 
 
 class ShopSerializer(GeoFeatureModelSerializer):
-    # location = GeometryField()
     types_of_coffee = TypeSerializer(many=True)
 
     class Meta:

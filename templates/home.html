@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Shop Mapper</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+            integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+            crossorigin="" />
+            <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+                integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+            integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+            crossorigin=""></script>
+    </head>
+    <body>
+        
+        <div id="map" style="height:800px;width:100%;"></div>
+        <script>
+            var google_streets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                    maxZoom: 22,
+                    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                })
+            var b1 = L.latLng(-50.892112, -52.844026) //southwest
+            var b2 = L.latLng(51.029848, 89.890341) //northeast
+            var bounds = L.latLngBounds(b1, b2);
+            
+            var map = L.map('map',{
+                zoom: 4,
+                center: [0.36, 36.63543],               
+                layers: [google_streets,],
+                maxBounds: bounds,
+                maxZoom: 22,
+                minZoom: 4
+            });
+
+            var geojson = '{{view.shops|safe}}'
+            var geojson_valid = JSON.parse(geojson);
+            var shops = L.geoJson(geojson_valid,{
+                pointToLayer: function(feature, latlng){
+                    return L.marker(latlng);
+                }
+            });
+            map.addLayer(shops);
+            
+
+            // var url = "{% url 'shop_api' %}";
+            // $.getJSON(url, function(data){
+            //     shops.addData(data)
+            // })
+        </script>      
+    </body>
+</html>
